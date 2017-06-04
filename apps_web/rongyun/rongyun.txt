@@ -1,0 +1,11 @@
+融云 
+banyan@ibos.com.cn
+ibos88998 
+
+开发环境
+APPKEY     0vnjpoadnxagz
+SEC        J7BAtcnB7z
+
+生产环境
+APPKEY e5t4ouvpt9vqa
+SEC    EMd9CDpQia

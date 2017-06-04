@@ -1,0 +1,213 @@
+API接口设计
+	* 主网关：http://domain/v1/
+	* json格式全部使用双引号"
+接口说明：服务器操作错误全部返回
+服务器端错误:返回500,所有包含服务器端的错误(暂未完善,但是后台有做日志记录,之后再改善)
+
+其余下面的失败均是业务逻辑操作失败
+同时所有的CUD操作均是POST请求,所有的R均是GET请求
+
+1.注册接口:users/register?strJson=strJson
+请求的数据strJson
+{
+	"data":{"user_alias_name":"keithl","user_email":"xxxx@163.com","user_pwd":base64("123456"),"user_auth":"encrpyt()"}//默认自定义别名
+}
+返回的json格式
+成功:
+{
+	"code":200,
+	"desc":"success",
+	"result":{"user_auth":"encrpyt()","user_token":"tokenId","user_token_expires":7*60*60*24}
+}
+
+业务失败:
+{
+	"code":failcode,
+	"desc":"fail",
+	"result":{"msg":""}
+}
+
+2.登录:users/login?strJson=strJson(GET)
+请求的数据strJson
+{
+	"data":{"user_auth":"","user_token":"","user_token_expires":""}
+}
+返回的json数据
+成功
+{
+	"code":200,
+	"desc":"success",
+	"result":{"user_auth":"","user_token":"","user_token_expires":7*60*60*24}
+}
+业务失败
+{
+	"code":failcode, 
+	"desc":"fail",
+	"result":{"msg":""}
+}
+
+3.修改密码:users/updatePwd?strJson=strJson(POST)
+请求的数据
+{
+	"user_auth":"",
+	"user_token":"",
+	"data":{"user_pwd":"","encrypt_pwd":"md5(pwd)","verify_code":""}//密码使用base64进行传输,加密的密码传输到时再具体商量用什么规则加密
+}
+
+成功
+{
+	"code":200,
+	"desc":"success",
+	"result":{"user_auth":"","user_pwd":"","encrypt_pwd":"encrypt(pwd)"}
+}
+
+业务失败
+{
+	"code":failcode,
+	"desc":"fail",
+	"result":{"msg":""}
+}
+
+4.发送验证码：users/getVerifyCode?strJson=strJson
+strJson=
+{
+	"data":{"user_email":""}
+}
+
+成功
+{
+	"code":200,
+	"desc":"success",
+	"result":{}
+}
+
+业务失败
+{
+	"code":failcode,  
+	"desc":"fail",
+	"result":{"msg":""}
+}
+
+5.添加用户详情
+users/detail?strJson=strJson
+strJson=
+{
+	"user_auth":"",
+	"user_token":"",
+	"data":{"user_domain_desc":"","user_work_desc":""}
+}
+成功
+{
+	"code":200,
+	"desc":"success",
+	"result":{}
+}
+
+业务失败
+{
+	"code":failcode, 
+	"desc":"fail",
+	"result":{"msg":""}
+}
+
+6.添加地理位置
+users/addPosition?strJson=strJson
+strJson=
+{
+	"user_auth":"",
+	"user_token":"",
+	"data":{"user_longitude":129.290093,"user_latitude":90.394234}
+}
+成功
+{
+	"code":200,
+	"desc":"success",
+	"result":{}
+}
+
+业务失败
+{
+	"code":failcode,
+	"desc":"fail",
+	"result":{"msg":""}
+}
+
+7.添加标签
+users/addPosition?strJson=strJson
+strJson=
+{
+	"user_auth":"",
+	"user_token":"",
+	"data":{"user_label_type":""}
+}
+成功
+{
+	"code":200,
+	"desc":"success",
+	"result":{}
+}
+
+业务失败
+{
+	"code":50032,  ##the email format have error
+	"desc":"fail",
+	"result":{"msg":""}
+}
+
+8.查询用户(single)
+users/queryUser?strJson
+strJson=
+{
+	"user_auth":"",
+	"user_token":"",
+	"data":{}
+}
+成功
+{
+	"code":200,
+	"desc":"success",
+	"result":{"user_auth":"","user_token":"","user_token_expires":"","user_id":9,"user_email":"",
+			"user_phone":"","user_really_name":"","user_alias_name":"","user_sex":"",
+			"user_longitude":"","user_latitude":"","user_label_type":""}
+}
+
+业务失败
+{
+	"code":failcode, 
+	"desc":"fail",
+	"result":{"msg":""}
+}
+
+9.提供咨询
+users/queryForDetail?strJson
+strJson=
+{
+	"user_auth":"",
+	"user_token":"",
+	"data":{}
+}
+成功
+{
+	"code":200,
+	"desc":"success",
+	"result":{}
+}
+业务失败
+{
+	"code":failcode,
+	"desc":"fail",
+	"result":{"msg":""}
+}
+
+
+failcode:
+500010:"the user is not exist"
+500011:"the auth have been changed through the network,invalidate operate "
+500012:"the user have been registered before"
+500021:"login fail,input error email or password or have not been registered"
+500031:"update pwd fail,input the previous password error"
+
+
+
+
+

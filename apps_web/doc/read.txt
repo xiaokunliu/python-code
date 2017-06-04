@@ -1,0 +1,25 @@
+1.python带有下划线的变量命名：
+_xxx       不能用'from module import *'导入
+
+__xxx__  系统定义名字
+
+__xxx     类中的私有变量名
+
+2.使用RESTFul的命名规范
+https://api.example.com/v1/zoos
+https://api.example.com/v1/animals
+https://api.example.com/v1/employees
+注意：v1表示对外发布的API接口版本号
+
+
+django 实现跨域问题
+https://github.com/ottoyiu/django-cors-headers/
+
+
+
+
+
+
+
+
+

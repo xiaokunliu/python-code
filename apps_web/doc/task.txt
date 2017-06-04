@@ -1,0 +1,96 @@
+任务表
+
+1.添加任务客
+/task/addTask?strJson=strJson
+strJson=
+{
+	"user_auth":"",
+	"user_token":"",
+	"data":{"task_title":"","task_price":10,"task_type_codes":"","task_desc":""}	//
+}
+
+success
+{
+	"code":200,
+	"desc":"success",
+	"result":{"user_auth":"","user_token":"","user_token_expires":""}
+}
+fail
+{
+	"code":failcode,
+	"desc":"fail",
+	"result":{"msg":""}
+}
+
+2.任务客重新发布
+/task/redeploy?strJson
+strJson=
+{
+	"user_auth":"",
+	"user_token":"",
+	"data":{"task_id":task_id}	//
+}
+返回的json数据
+success
+{
+	"code":200,
+	"desc":"success",
+	"result":{"user_auth":"","user_token":"","user_token_expires":""}
+}
+fail
+{
+	"code":failcode,
+	"desc":"fail",
+	"result":{"msg":""}
+}
+
+3.接手任务客
+/task/receiveTask?strJson
+strJson请求的数据:
+{
+	"user_auth":"",
+	"user_token":"",
+	"data":{"task_id":10}//并作系统消息推送
+}
+返回的json数据
+success
+{
+	"code":200,
+	"desc":"success",
+	"result":{"user_auth":"","user_token":"","user_token_expires":""}
+}
+fail
+{
+	"code":failcode,
+	"desc":"fail",
+	"result":{"msg":""}
+}
+
+4.查询任务客(根据发布者查询)
+/task/queryTaskByPublisher?strJson=strJson
+strJson请求的数据:
+{
+	"user_auth":"",
+	"user_token":"",
+	"data":{
+			"pageIndex":0,//default,
+			"pageSize":15,//default
+			"condition":{},
+			"order_by":{},
+			"optional_fields":[]
+			}
+}
+返回的json数据
+success
+{
+	"code":200,
+	"desc":"success",
+	"result":{"dataList":[],"pageIndex":current_pageIndex,"pageSize":currentPageSize,"total":totalNum}//model json data
+
+}
+fail
+{
+	"code":failcode,
+	"desc":"fail",
+	"result":{"msg":""}
+}
