@@ -96,4 +96,3 @@ eval "pip completion --zsh"
 ### 3.使用bash
 pip completion --bash >> ~/.profile
 ```
-
