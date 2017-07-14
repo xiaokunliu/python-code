@@ -1,2 +1,0 @@
-2015-12-30 21:01:27,460 - views.py:32 - applog - the request is not post method
-2015-12-30 21:01:27,460 - views.py:96 - applog - {'msg': 'should be use post method to sumbit the data', 'code': 50001}
