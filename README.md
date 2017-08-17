@@ -1,2 +1,2 @@
 # python-code
-for python project code 
+for python project code
