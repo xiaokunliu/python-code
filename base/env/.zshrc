@@ -1,12 +1,12 @@
 # Path to your oh-my-zsh installation.
-export ZSH=/Users/wind/.oh-my-zsh
+export ZSH=~/.oh-my-zsh
 
 ## set python dev tool
 eval "pip completion --zsh"
 
-## set python virtualenv path,default use python2.7 version
+## set python virtualenv path,安装虚拟环境的时候是使用python3.5来安装的，因此这里必须指定python3.5，否则会出现找不到模块virtualenvwrapper的错误
 export WORKON_HOME=~/work/python/
-export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python
+export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3.5
 export VIRTUALENVWRAPPER_VIRTUALENV=/usr/local/bin/virtualenv
 export PROJECT_HOME=~/work/python/projects
 source /usr/local/bin/virtualenvwrapper.sh
