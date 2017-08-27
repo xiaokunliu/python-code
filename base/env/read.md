@@ -1,3 +1,14 @@
+#### 基于python开发环境的Dockerfile
+> 在本地创建一个管理Docker的目录
+```code
+## MacOSX 系统下的
+mkdir -p ~/mywork/docker/python
+
+## 其他操作系统平台自定义管理目录，这里省略
+```
+
+> python开发环境的Dockerfile
+```code
 FROM ubuntu  ## 不指定版本默认使用最新版本
 MAINTAINER keithl <define_yourselves email>
 
@@ -45,3 +56,19 @@ RUN mkvirtualenv --python=/usr/bin/python2.7 env2.7 && mkvirtualenv --python=/us
 ## 暴露docker容器的端口
 EXPOSE 3306 80 22
 CMD ["/usr/sbin/sshd", "-D"]
+```
+
+> 构建python环境下的Docker 镜像
+```code
+docker build -t docker-ssh:v1 $PWD
+```
+
+> 构建容器并挂载本地持久化文件目录到docker容器中，并指定docker映射端口
+```code
+docker run -d -P 22:32770 80:32769 3306:32768 --name pydev -v $PWD/data:/opt/data docker-ssh:v1
+```
+
+> 参见github
+```
+https://github.com/xiaokunliu/python-code/tree/master/base/env
+```
