@@ -24,7 +24,7 @@ RUN apt-get install -y vim
 RUN apt-get install -y zsh && apt-get install -y wget
 RUN apt-get install -y git
 RUN wget https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh -O - | sh
-ADD .zshrc ~/.zshrc
+ADD $PWD/.zshrc ~/.zshrc
 
 RUN mkdir -p ~/work/python/projects
 RUN chmod 775 -R ~/work/python/
