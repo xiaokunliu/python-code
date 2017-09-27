@@ -86,7 +86,3 @@ p is k  # True,why?
 小的整数和字符串被缓存并复用，在python中可以查询一个对象引用的次数,可以使用sys.getrefcount(obj),返回对象的引用次数
 """
 
-
-
-
-

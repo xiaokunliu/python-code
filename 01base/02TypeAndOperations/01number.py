@@ -141,3 +141,4 @@ fz = Fraction(*f.as_integer_ratio())
 print(fz)
 
 
+
