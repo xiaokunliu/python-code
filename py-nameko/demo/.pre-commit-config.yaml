@@ -1,0 +1,38 @@
+# See http://pre-commit.com/hooks.html
+#
+# Examples:
+#     .tox/py27/bin/pre-commit install
+#     SKIP=flake8 .tox/py27/bin/pre-commit run --all-files
+#     SKIP=flake8 git commit
+#     .tox/py27/bin/pre-commit run --files xxx.py yyy.py
+#
+- repo: https://github.com/pre-commit/pre-commit-hooks.git
+  sha: v0.7.1
+  hooks:
+    - id: check-docstring-first
+    - id: check-added-large-files
+    - id: check-merge-conflict
+    - id: trailing-whitespace
+    - id: check-yaml
+    - id: end-of-file-fixer
+    - id: autopep8-wrapper
+    - id: flake8
+      args: [--max-line-length=79]
+    - id: requirements-txt-fixer
+    - id: fix-encoding-pragma
+- repo: https://github.com/asottile/reorder_python_imports.git
+  sha: v0.3.2
+  hooks:
+    - id: reorder-python-imports
+      language_version: python2.7
+- repo: https://github.com/Lucas-C/pre-commit-hooks.git
+  sha: v1.0.1
+  hooks:
+    - id: remove-tabs
+      args: [ --whitespaces-count=4 ]
+      exclude: \.bumpversion\.cfg$
+- repo: https://github.com/xqliang/check-swagger.git
+  sha: v0.1.4
+  hooks:
+    - id: check-swagger
+      files: spec/.*/.*\.(yaml|json)

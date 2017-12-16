@@ -1,0 +1,241 @@
+# vim: et ts=2 sw=2 ft=ansible
+# 参考文档：https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md
+swagger: "2.0"
+basePath: /v1
+schemes:
+  - http
+info:
+  title: demo接口文档
+  version: "1.0"
+host: xxx.xxx.xx.xx
+consumes:
+  - application/json
+produces:
+  - application/json
+x-users:
+  dev:
+    - name: 某某某
+      email: xxx
+      mobile: XXX
+      department: CC
+  qa:
+    - name: 某某某
+      email: xxxx
+      mobile: XXX
+      department: QA
+
+paths:
+  /demo/health:
+    get:
+      summary: 获取服务健康状态
+      tags:
+        - demo
+      operationId: get_health
+      responses:
+        default:
+          description: |
+            返回结果：{"code": "xxx", "msg": "xxx", "data": {}, "time": xxx, "why": "xxx"}
+
+            其中`code`字段可能返回的错误码包括：
+            * "OK" 操作成功，结果见`data`字段
+            * "INTERNAL_SERVER_ERROR" 内部错误，具体原因见`why`字段
+          schema:
+            $ref: '#/definitions/HealthResponse'
+  /demo/path/index/{uid}:
+    get:
+      summary: 根据请求参数在path中进行查询
+      tags:
+        - demo
+      operationId: index
+      parameters:
+        - name: uid
+          in: path        # Note the name is the same as in the path
+          description: 用户uid
+          required: true
+          type: integer
+      responses:
+        default:
+          description: |
+            返回结果：{"code": "xxx", "msg": "xxx", "data": {}, "time": xxx, "why": "xxx"}
+
+            其中`code`字段可能返回的错误码包括：
+            * "OK" 操作成功，结果见`data`字段
+            * "INTERNAL_SERVER_ERROR" 内部错误，具体原因见`why`字段
+          schema:
+            $ref: '#/definitions/HealthResponse'
+  /demo/query/index:
+    get:
+      summary: 根据请求参数在query中查询
+      operationId: query_index
+      parameters:
+        - name: cid
+          in: query
+          description: 用户频道Id
+          required: true
+          type: integer
+      responses:
+        default:
+          description: |
+           返回结果：{"code": "xxx", "msg": "xxx", "data": {}, "time": xxx, "why": "xxx"}
+
+            其中`code`字段可能返回的错误码包括：
+            * "OK" 操作成功，结果见`data`字段
+            * "INTERNAL_SERVER_ERROR" 内部错误，具体原因见`why`字段
+          schema:
+            $ref: '#/definitions/HealthResponse'
+  /demo/query/many:
+    get:
+      summary: 根据请求参数在query中查询
+      operationId: query_many
+      parameters:
+        - name: cid
+          in: query
+          description: 用户频道Id
+          required: true
+          type: integer
+          minimum: 1
+        - name: uid
+          in: query
+          description: 用户id
+          required: false
+          type: integer
+          minimum: 1
+        - name: channelid
+          in: query
+          required: false
+          type: string
+      responses:
+        default:
+          description: |
+           返回结果：{"code": "xxx", "msg": "xxx", "data": {}, "time": xxx, "why": "xxx"}
+
+            其中`code`字段可能返回的错误码包括：
+            * "OK" 操作成功，结果见`data`字段
+            * "INTERNAL_SERVER_ERROR" 内部错误，具体原因见`why`字段
+          schema:
+            $ref: '#/definitions/HealthResponse'
+  /demo/post:
+    post:
+      summary: 根据请求参数在post的表单中查询
+      operationId: do_post
+      parameters:
+        - name: cid
+          in: formData
+          description: 用户频道Id
+          required: true
+          type: integer
+          minimum: 1
+        - name: uid
+          in: formData
+          description: 用户id
+          required: false
+          type: integer
+          minimum: 1
+        - name: channelid
+          in: formData
+          required: false
+          type: string
+      responses:
+        default:
+          description: |
+           返回结果：{"code": "xxx", "msg": "xxx", "data": {}, "time": xxx, "why": "xxx"}
+
+            其中`code`字段可能返回的错误码包括：
+            * "OK" 操作成功，结果见`data`字段
+            * "INTERNAL_SERVER_ERROR" 内部错误，具体原因见`why`字段
+          schema:
+            $ref: '#/definitions/HealthResponse'
+  /demo/post/query:
+    post:
+      summary: 根据请求参数在post的表单以及query的路径中查询
+      operationId: query_post
+      parameters:
+        - name: cid
+          in: query
+          description: 用户频道Id
+          required: true
+          type: integer
+          minimum: 1
+        - name: uid
+          in: query
+          description: 用户id
+          required: false
+          type: integer
+          minimum: 1
+        - name: channelid
+          in: formData
+          required: false
+          type: string
+      responses:
+        default:
+          description: |
+           返回结果：{"code": "xxx", "msg": "xxx", "data": {}, "time": xxx, "why": "xxx"}
+
+            其中`code`字段可能返回的错误码包括：
+            * "OK" 操作成功，结果见`data`字段
+            * "INTERNAL_SERVER_ERROR" 内部错误，具体原因见`why`字段
+          schema:
+            $ref: '#/definitions/HealthResponse'
+  /demo/post/body:
+    post:
+      summary: 根据请求参数在body中查询
+      operationId: query_body
+      parameters:
+        - in: body
+          name: jsonParameters
+          schema:
+            $ref: '#/definitions/RequestJson'
+      responses:
+        default:
+          description: |
+           返回结果：{"code": "xxx", "msg": "xxx", "data": {}, "time": xxx, "why": "xxx"}
+
+            其中`code`字段可能返回的错误码包括：
+            * "OK" 操作成功，结果见`data`字段
+            * "INTERNAL_SERVER_ERROR" 内部错误，具体原因见`why`字段
+          schema:
+            $ref: '#/definitions/HealthResponse'
+definitions:
+  RequestJson:
+    description: 请求参数在body中的json格式
+    type: object
+    properties:
+      cid:
+         description: 用户的cid
+         type: integer
+      uid:
+         description: 用户的uid
+         type: integer
+      channelid:
+         description: 频道Id
+         type: string
+    required:
+      - cid
+  Response:
+    description: API返回结果基类
+    type: object
+    properties:
+      time:
+        description: 当前服务器UNIX时间戳，单位为秒
+        type: integer
+      code:
+        description: 错误码，比如 "OK", "BAD_REQUEST"
+        type: string
+      msg:
+        description: 用户可读的描述信息
+        type: string
+      why:
+        description: 详细的错误信息，该字段不一定返回
+        type: string
+      data:
+        description: 结果数据，该字段不一定返回
+        type: object
+    required:
+      - time
+      - code
+      - msg
+  HealthResponse:
+    description: 健康检查
+    type: object
+    allOf:
+      - $ref: '#/definitions/Response'

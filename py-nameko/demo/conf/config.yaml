@@ -1,0 +1,80 @@
+AMQP_URI: pyamqp://guest:guest@127.0.0.1
+WEB_SERVER_ADDRESS: ${WEB_ADDRESS:127.0.0.1:10000}
+max_workers: 30
+SERVICE_CONTAINER_CLS: nameko_dyconf.ServiceContainer
+
+DYCONF:
+    enabled: true
+    host: 127.0.0.1
+    port: 8500
+
+CONSUL:
+    enabled: true
+    host: 127.0.0.1
+    port: 8500
+    tags:
+        - urlprefix-/v1/{service}
+        - v1
+
+SWAGGER:
+    config:
+        use_models: false
+    resources:
+        default:
+            v1: spec/v1/api.yaml
+
+ZIPKIN:
+    writer_kwargs:
+        host: 127.0.0.1
+        port: 10544
+
+REDIS_URIS:
+    cache: redis://127.0.0.1:6379?socket_timeout=3
+
+LOGGING:
+    version: 1
+    disable_existing_loggers: false
+    formatters:
+        standard:
+            format: '%(levelname)s %(asctime)s %(filename)s %(lineno)d %(traceid)s %(message)s'
+        elk:
+            format: '%(servicename)s:%(levelname)s %(asctime)s %(filename)s %(lineno)d %(traceid)s %(message)s'
+        accesslog:
+            format: '%(message)s'
+    filters:
+        tracefilter:
+            (): pyzipkin.filters.TraceFilter
+    handlers:
+        all:
+            class: logging.handlers.TimedRotatingFileHandler
+            formatter: standard
+            when: midnight
+            filename: logs/${SUPERVISOR_PROCESS_NAME:service}.log
+            filters: [tracefilter]
+        console:
+            class: logging.StreamHandler
+            formatter: standard
+            filters: [tracefilter]
+        accesslog:
+            class: logging.StreamHandler
+            formatter: accesslog
+        elk:
+            class: logging.handlers.SysLogHandler
+            formatter: elk
+            filters: [tracefilter]
+            address: [127.0.0.1, 10519]
+    loggers:
+        nameko.accesslog:
+            handlers: []
+            propagate: false
+        nameko:
+            level: INFO
+        pyzipkin:
+            level: INFO
+    root:
+        level: ${LOG_LEVEL:INFO}
+        handlers: [all, elk]
+
+# 服务应用其他配置
+REDIS_TIME_OUT: 5
+

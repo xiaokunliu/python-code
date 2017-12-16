@@ -1,0 +1,2 @@
+[run]
+omit = /usr/*,.venv/*,.git/*,.tox/*,test/*,*/test_*.py,*.egg,setup.py

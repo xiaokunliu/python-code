@@ -1,0 +1,5 @@
+# http://stackoverflow.com/questions/115983/add-empty-directory-to-git-repository
+# Ignore everything in this directory
+*
+# Except this file
+!.gitignore

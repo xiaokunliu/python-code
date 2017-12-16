@@ -1,0 +1,6 @@
+nameko==2.5.4.4
+nameko-consul==1.3.13
+nameko-dyconf==1.0.7
+nameko-redis==1.0.4
+nameko-swagger==1.2.7
+nameko-zipkin==1.2.9
