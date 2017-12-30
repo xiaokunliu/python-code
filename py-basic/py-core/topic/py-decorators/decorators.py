@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: UTF-8 -*-
 
-
 """
 装饰器
 1. 装饰器的作用：为函数和类指定管理或增强代码的一种方式
@@ -127,7 +126,7 @@ class Tracker(object):
 
     def __call__(self, *args, **kwargs):
         self.calls += 1
-        print "call %s to %s " % (self.calls,self.func.__name__)
+        print("call %s to %s " % (self.calls,self.func.__name__))
 
 
 @Tracker
@@ -152,18 +151,18 @@ def tracker(func):
     return warpper
 
 
-# def tracker(func):
-#     u"""
-#     python3.x
-#     使用函数闭包来实现装饰器功能
-#     global
-#     """
-#     def warpper(*args, **kwargs):
-#         nolocal calls
-#         calls += 1
-#         print("call %s to %s" % (calls, func.__name__))
-#         return func(*args,**kwargs)
-#     return warpper
+def tracker(func):
+    u"""
+    python3.x
+    使用函数闭包来实现装饰器功能
+    global
+    """
+    def wrapper(*args, **kwargs):
+        nonlocal calls
+        calls += 1
+        print("call %s to %s" % (calls, func.__name__))
+        return func(*args,**kwargs)
+    return wrapper
 
 
 def tracker(func):
@@ -189,7 +188,6 @@ def tracker(func):
 #         print("call %s to %s" % (calls,func.__name__))
 #         return func(*args,**kwargs)
 #     return onCall
-
 
 
 # 使用描述符来装饰方法
@@ -218,8 +216,6 @@ class Wrapper(object):
 
     def __call__(self, *args, **kwargs):
         return self.desc(self.object, *args, **kwargs)
-
-
 
 if __name__ == '__main__':
     fn(1, 3, 4)
