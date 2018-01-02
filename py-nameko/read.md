@@ -20,3 +20,10 @@ nameko-admin createproject demo
 
 # 隐去相应的域名，需自行设置
 ```
+
+> nameko本身依赖的第三方插件
+
+```text
+urllib3, idna, chardet, certifi, requests, six, greenlet, enum34, enum-compat, eventlet, wrapt, funcsigs, pbr, mock, werkzeug, pyyaml, path.py, anyjson, amqp, kombu, nameko
+```
+
