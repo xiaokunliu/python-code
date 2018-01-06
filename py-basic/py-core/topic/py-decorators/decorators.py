@@ -158,7 +158,7 @@ def tracker(func):
     global
     """
     def wrapper(*args, **kwargs):
-        nonlocal calls
+        # nonlocal calls  for py3.x
         calls += 1
         print("call %s to %s" % (calls, func.__name__))
         return func(*args,**kwargs)
