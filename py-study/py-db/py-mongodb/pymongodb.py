@@ -3,6 +3,7 @@
 
 u"""
 封装pymongodb 的操作
+https://docs.mongodb.com/manual/tutorial/query-documents/
 """
 from pymongo import MongoClient
 import settings

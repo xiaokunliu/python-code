@@ -25,27 +25,39 @@ class EncryptClass(object):
         self._sha1 = hashlib.sha1()
 
     def md5_text(self, text):
+        u"""
+        注意进行加密的时候需要将文本转换为字符串，使用Unicode会报错
+        :param text:
+        :return:
+        """
+        if isinstance(text, unicode):
+            text = text.encode("UTF-8")
         self._md5.update(text)
         return self._m5.hexdigest()
 
     def sha1(self, text):
+        if isinstance(text, unicode):
+            text = text.encode("UTF-8")
         self._sha1.update(text)
         return self._sha1.hexdigest()
-
-    def encode_base64(text):
+    
+    @staticmethod
+    def base64_encode(text):
         return base64.b64encode(text)
 
-    def decode_base64(text):
+    @staticmethod
+    def base64_decode(text):
         return base64.b64decode(text)
-
+    
+    @staticmethod
     def uuid_3(namespace, name):
-        return uuid.uuid3(namespace,
-                          name)  # use MD5 encrypt text,just for unqiue namespace and name
+        return uuid.uuid3(namespace, name)
 
+    @staticmethod
     def uuid_5(namespace, name):
-        return uuid.uuid5(namespace,
-                          name)  # use SHA! encrypt text,just for unqiue namespace and name
+        return uuid.uuid5(namespace, name)
 
+    @staticmethod
     def uuid_1():
         _str = uuid.uuid1().__str__()
         return _str.replace("-", "").upper()

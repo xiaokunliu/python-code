@@ -263,23 +263,120 @@ db.inventory.find(
 )
 ```
 
+> 查询的文档字段instock数组中最后一个元素数据,使用mongodb的文档数组投影
 
+```text
+# $elemMatch, $slice, and $.
+db.inventory.find( { status: "A" }, { item: 1, status: 1, instock: { $slice: -1 } } )
+```
 
+#### 查询Null或者不存在的字段
 
+```text
+## 数据准备
+db.inventory.insertMany([
+   { _id: 1, item: null },
+   { _id: 2 }
+])
+```
 
+> 查询item为null的文档数据
 
+```text
+db.inventory.find( { item: null } )
+```
 
+> 类型检查，bson数据为null的类型type是10
 
+```text
+db.inventory.find( { item : { $type: 10 } } )
+```
 
+> 字段存在性检查
 
+```text
+db.inventory.find( { item : { $exists: false } } )
+```
 
+#### mongodb shell迭代
 
+> 手动迭代
 
+```javascript 1.8
+var myCursor = db.users.find( { type: 2 } );
+myCursor
+```
 
+> 使用next迭代
 
+```javascript 1.8
+var myCursor = db.users.find( { type: 2 } );
 
+while (myCursor.hasNext()) {
+   printjson(myCursor.next());
+}
+```
 
+> 使用foreach
 
+```javascript 1.8
+var myCursor =  db.users.find( { type: 2 } );
+
+myCursor.forEach(printjson);
+```
+
+> 使用索引迭代
+
+```text
+var myCursor = db.inventory.find( { type: 2 } );
+var documentArray = myCursor.toArray();
+var myDocument = documentArray[3];
+```
+
+> 索引迭代与文档下标
+
+```text
+var myCursor = db.users.find( { type: 2 } );
+var myDocument = myCursor[1];
+
+## 等价于
+
+myCursor.toArray() [1];
+```
+
+> 使用noCursorTimeout()将阻止cursor连接超时10min之后自动关闭
+
+```text
+var myCursor = db.users.find().noCursorTimeout();
+```
+
+> cursor batch操作
+
+```text
+# find() and aggregate() operations have an initial batch size of 101 documents by default
+# cursor.next() will perform a getMore operation to retrieve the next batch
+# To see how many documents remain in the batch as you iterate the cursor, you can use the objsLeftInBatch()
+var myCursor = db.inventory.find();
+
+var myFirstDocument = myCursor.hasNext() ? myCursor.next() : null;
+
+myCursor.objsLeftInBatch();
+```
+
+> Cursor Information
+
+```text
+db.serverStatus().metrics.cursor
+# 查询结果如下：
+{
+   "timedOut" : <number>
+   "open" : {
+      "noTimeout" : <number>,
+      "pinned" : <number>,
+      "total" : <number>
+   }
+}
+```
 
 
 
