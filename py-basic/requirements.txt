@@ -1,6 +1,0 @@
-requests
-tornado
-scrapy
-bs4
-selenium
-futures
