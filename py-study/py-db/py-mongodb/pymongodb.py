@@ -15,8 +15,11 @@ class PyMongoClient(object):
     """
     _client = MongoClient(settings.MONGO_URI)
     
-    def __init__(self, collections):
-        self._collection = self._client[collections]
+    def __init__(self, database, collections):
+        self._collection = self._client[database][collections]
+        
+    def get_collections(self):
+        return self._collection
         
     def find_all_collections(self):
         u"""
@@ -67,4 +70,8 @@ class PyMongoClient(object):
         :return:
         """
         return self._collection.find_one({filed: value})
-    
+
+
+if __name__ == '__main__':
+    db_model = PyMongoClient("cclive", "webcc_not_shown_reason")
+    db_model.get_collections().getIndexes()

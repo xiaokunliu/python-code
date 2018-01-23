@@ -3,7 +3,7 @@
 
 u"""
 mongo engine
-http://docs.mongoengine.org/
+http://docs.mongoengine.org/guide/defining-documents.html
 """
 
 
