@@ -7,4 +7,4 @@ MONGO_URI = "mongodb://webcc:webcc@192.168.45.147:32000/cclive"
 
 # mongodb://webcc:webcc@192.168.45.147:32000/cclive
 
-
+# mongodb://127.0.0.1:27017

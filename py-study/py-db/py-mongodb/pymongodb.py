@@ -4,8 +4,9 @@
 u"""
 封装pymongodb 的操作
 https://docs.mongodb.com/manual/tutorial/query-documents/
+https://api.mongodb.com/python/current/
 """
-from pymongo import MongoClient
+import pymongo
 import settings
 
 
@@ -13,7 +14,7 @@ class PyMongoClient(object):
     u"""
     pymongo client
     """
-    _client = MongoClient(settings.MONGO_URI)
+    _client = pymongo.MongoClient(settings.MONGO_URI)
     
     def __init__(self, database, collections):
         self._collection = self._client[database][collections]
@@ -47,10 +48,47 @@ class PyMongoClient(object):
             raise Exception("document_list should be list type")
         return self._collection.insert_many(document_list).inserted_ids
     
+    def update_one(self, filter, document_map):
+        u"""
+        更新一条数据
+        :param condition:
+        :param document_map:
+        :return:
+        """
+        # upsert：True表示如果不存在则执行insert操作,默认设置不做insert操作
+        return self._collection.\
+            update_one(filter, document_map, upsert=False).modified_count
+    
+    def update_many(self, filter, document_map):
+        u"""
+        更新多条数据
+        :param filter:
+        :param document_map:
+        :return:
+        """
+        return self._collection.\
+            update_many(filter, document_map, upsert=False).modified_count
+    
+    def delete_one(self, condition):
+        u"""
+        根据条件查询并删除一条数据
+        :param condition:
+        :return:
+        """
+        return self._collection.delete_one(condition).deleted_count
+    
+    def delete_many(self, condition):
+        u"""
+        根据条件删除数据
+        :param condition:
+        :return:
+        """
+        return self._collection.delete_many(condition).deleted_count
+    
     def query_by_id(self, _id, keys=[]):
         u"""
         根据mongodb的查询指定的keys数据
-        :param _id:
+        :param _id:ObjectId
         :param keys:
         :return:
         """
@@ -70,8 +108,118 @@ class PyMongoClient(object):
         :return:
         """
         return self._collection.find_one({filed: value})
+    
+    def query_sort_limit(self, condition, sorted={}, offset=None, size=None):
+        u"""
+        根据查询排序分页查询数据
+        :param condition:{f1:v1, f2:v2, f3:v3},查询条件这些都是f1 = v1
+        :param sorted:{f1:1,f2:-1}，1表示顺序排序，-1表示倒序排序
+        :param offset:分页,从第offset条记录开始查询
+        :param size:分页显示的大小
+        :return:
+        """
+        _sorted_list = []
+        if sorted:
+            for key, value in sorted.items():
+                if value == 1:
+                    _sorted_list.append({key, pymongo.ASCENDING})
+                elif value == -1:
+                    _sorted_list.append({key, pymongo.DESCENDING})
+        if offset is not None and size is not None:
+            if offset < 0 or size < 0:
+                raise Exception("pass the offset and size is not invalidated,"
+                                "the offset[%d],the size[%d]" % (offset, size))
+            _result = self._collection.find(condition).sort(_sorted_list).\
+                skip(offset).limit(size)
+        else:
+            _result = self._collection.find(condition).sort(_sorted_list)
+        if _result:
+            return list(_result)
+        return []
+    
+    def query_by_conditions(self, condition):
+        u"""
+        根据条件查询
+        :param condition:{f1:v1, f2:v2, f3:v3},查询条件这些都是f1 = v1
+        :return:
+        """
+        return self.query_sort_limit(condition)
+    
+    def query_by_sort(self, condition, sorted={}):
+        u"""
+        根据条件并按照指定的顺序排序输出
+        :param condition:{f1:v1, f2:v2, f3:v3},查询条件这些都是f1 = v1
+        :param sorted:
+        :return:
+        """
+        return self.query_sort_limit(condition, sorted)
+    
+    def query_counter(self, condition):
+        u"""
+        根据条件查询记录个数
+        :param condition:查询条件,{f1:v1, f2:v2, f3:v3},查询条件这些都是f1 = v1
+        :return:
+        """
+        return self._collection.find(condition).count()
 
-
-if __name__ == '__main__':
-    db_model = PyMongoClient("cclive", "webcc_not_shown_reason")
-    db_model.get_collections().getIndexes()
+    def create_index(self, keys={}, **kwargs):
+        u"""
+        创建一个索引,一个索引下可以有多个key
+        :param index_fileds:{f1: idx_policy, ...}
+        :return:
+        """
+        if not keys:
+            raise Exception("have not any fields to create index")
+        _index_list = []
+        for key, policy in keys.items():
+            if not isinstance(key, str):
+                raise Exception("the key[%s] must be str type" % str(key))
+            if policy not in (pymongo.DESCENDING,
+                              pymongo.ASCENDING,
+                              pymongo.GEO2D,
+                              pymongo.GEOHAYSTACK,
+                              pymongo.GEOSPHERE,
+                              pymongo.HASHED,
+                              pymongo.TEXT):
+                raise Exception("the index policy type is error")
+            _index_list.append({key, policy})
+        if kwargs:
+            for key, value in kwargs.items():
+                if key not in ["name", "unique", "sparse", "bucketSize",
+                               "min", "max", "expireAfterSeconds",
+                               "partialFilterExpression", "collation"]:
+                    raise Exception("the key name is not invalidated .")
+        self._collection.create_index(_index_list, **kwargs)
+    
+    def show_index_information(self):
+        return self._collection.index_information()
+    
+    def create_indexes(self, mutil_indexes):
+        u"""
+        创建多个索引数据
+        :param mutil_indexes:
+        :return:
+        """
+        if not isinstance(mutil_indexes, dict):
+            raise Exception("mutil_indexes should be dict instance ..")
+        _index_items = []
+        for index_name, index_keys in mutil_indexes:
+            if not isinstance(index_keys, dict):
+                raise Exception("the index is not dict instance ")
+            _index_keys = []
+            for key, policy in index_keys.items():
+                if not isinstance(key, str):
+                    raise Exception("the key should be str type")
+                if policy not in (pymongo.DESCENDING,
+                                  pymongo.ASCENDING,
+                                  pymongo.GEO2D,
+                                  pymongo.GEOHAYSTACK,
+                                  pymongo.GEOSPHERE,
+                                  pymongo.HASHED,
+                                  pymongo.TEXT):
+                    raise Exception("the index policy type is error")
+                _index_keys.append({key, policy})
+            _item = pymongo.IndexModel(_index_keys, name=index_name)
+            _index_items.append(_item)
+        self._collection.create_indexes(_index_items)
+        
