@@ -26,8 +26,11 @@ def load_config2():
 	或者引用模块
 	:return:
 	"""
-	import settings
-	app.config.from_object(settings)
+
+
+from db.mongodb.pymongo import settings
+
+app.config.from_object(settings)
 
 
 def load_config_by_filename():

@@ -7,7 +7,7 @@ https://docs.mongodb.com/manual/tutorial/query-documents/
 https://api.mongodb.com/python/current/
 """
 import pymongo
-import settings
+from db.mongodb.pymongo import settings
 
 
 class PyMongoClient(object):
@@ -222,4 +222,6 @@ class PyMongoClient(object):
             _item = pymongo.IndexModel(_index_keys, name=index_name)
             _index_items.append(_item)
         self._collection.create_indexes(_index_items)
-        
+
+
+    

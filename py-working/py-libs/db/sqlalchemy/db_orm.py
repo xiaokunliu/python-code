@@ -54,8 +54,6 @@ class BaseModel(_Base):
         Session = sessionmaker(bind=cls._engine)
         return Session()
 
-## 使用实例
-
 
 class UserInfo(BaseModel):
     u"""

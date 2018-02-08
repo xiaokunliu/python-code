@@ -3,8 +3,6 @@
 
 # mongodb://[username:password@]host1[:port1][,host2[:port2],...[,hostN[:portN]]][/[database][?options]]
 
-MONGO_URI = "mongodb://webcc:webcc@192.168.45.147:32000/cclive"
+MONGO_URI = "mongodb://username:passowrd@host:post/db"
 
-# mongodb://webcc:webcc@192.168.45.147:32000/cclive
-
-# mongodb://127.0.0.1:27017
+# mongodb://127.0.0.1:27017    # 本地默认配置
