@@ -59,6 +59,14 @@ class PyMongoClient(object):
         return self._collection.\
             update_one(filter, document_map, upsert=False).modified_count
     
+    def replace_one(self, source_map, dist_map):
+        u"""
+        :param source_map:  更新条件
+        :param dist_map:    根据条件进行替换
+        :return:
+        """
+        return self._collection.replace_one(source_map, dist_map).modified_count
+    
     def update_many(self, filter, document_map):
         u"""
         更新多条数据
@@ -223,5 +231,28 @@ class PyMongoClient(object):
             _index_items.append(_item)
         self._collection.create_indexes(_index_items)
 
+    def query_by_null_fields(self, fields=[]):
+        if not fields:
+            _query_comdition = {}
+            for fileld in fields:
+                _query_comdition[fileld] = "NONE"
+            return self._collection.find(_query_comdition)
+            
+    def get_field_exist(self, filed):
+        u"""
+        查询当前field字段在document中存在的数据
+        :param filed:
+        :return:
+        """
+        return self._collection.find({filed, {"$exist": True}})
 
+    def get_filed_not_exist(self, filed):
+        u"""
+        查询当前field字段不在document中的数据
+        :param filed:
+        :return:
+        """
+        return self._collection.find(filed, {"$exist": False})
+    
+    
     
