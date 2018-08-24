@@ -53,6 +53,8 @@ def load_config_by_env():
 	app.config.from_envvar("FLASK_SETTINGS")
 
 
+# ======== 定义路由 ==========
+
 @app.route("/")
 def index():
 	return u"index"
@@ -72,12 +74,19 @@ def convert_url():
 	any：可以指定多种路径，但是需要传入参数
 	:return:
 	"""
-    pass
-
-
-@app.route("/any(a,b):page_name")
-def any_url():
 	pass
+
+
+@app.route("/<any(a,b):page_name>/")
+def any_url():
+	u"""
+	访问/a/ 或者 /b/都匹配这个规则，访问/a/ 对应的page_name就是a
+	:return:
+	"""
+	pass
+
+
+
 
 
 if __name__ == '__main__':
@@ -88,4 +97,10 @@ if __name__ == '__main__':
 	Server.HTTPServer，通过select.select做0.5s的'while True'的事件轮询，这种启动方式
 	仅适用于调试，生产环境要使用uwsgi或者是Gunicorn
 	"""
-	app.run(host=u"0.0.0.0", port=9000, debug=True)
+	# 调试模式有两种
+	# 其一
+	# app.run(host=u"0.0.0.0", port=9000, debug=True)
+	
+	# 其二
+	app.debug = True
+	app.run(host=u"0.0.0.0", port=9000)

@@ -196,6 +196,12 @@ paths:
           schema:
             $ref: '#/definitions/HealthResponse'
 definitions:
+  RequestJsonArr:
+    description: 请求参数在body为数组形式
+    type: array
+    maxItems: 100
+    items:
+      $ref: '#/definitions/RequestJson'
   RequestJson:
     description: 请求参数在body中的json格式
     type: object

@@ -9,6 +9,7 @@ http://docs.sqlalchemy.org/en/latest/
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
+from sqlalchemy import Column, Integer, String, Sequence
 
 import logging
 
@@ -59,5 +60,12 @@ class UserInfo(BaseModel):
     u"""
     定义一个持久化的用户模型
     """
-    pass
-
+    __table_name__ = "dt_user_info"
+    
+    # 定义属性结构
+    id = Column(Integer, Sequence('user_id_seq'), primary_key=True,
+                autoincrement=True)
+    name = Column(String(24))
+    
+    def __init__(self, session):
+        self.session = session
