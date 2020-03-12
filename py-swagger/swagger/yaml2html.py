@@ -11,11 +11,11 @@
 
 """
 Usage:
-    TODO: pip install PyYAML
     python swagger-yaml-to-html.py < /path/to/api.yaml > doc.html
 """
 import json
 import sys
+
 import yaml
 
 TEMPLATE = """

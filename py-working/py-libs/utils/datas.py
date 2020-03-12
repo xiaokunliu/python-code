@@ -4,7 +4,7 @@
 u"""
 常用的文件处理
 """
-from xml.etree.ElementTree import fromstring, Element, tostring, parse
+from xml.etree.ElementTree import Element, fromstring, parse, tostring
 
 
 class CSVUtils(object):
@@ -35,4 +35,3 @@ class CSVUtils(object):
             raise Exception("the xml file[%s] is not exist" % xml_file)
         doc = parse(xml_file)
         return doc      # 返回文档对象
-    
